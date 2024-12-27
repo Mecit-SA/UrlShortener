@@ -1,0 +1,19 @@
+<input
+    type="text" 
+    class="form-control item-input-control"
+    [(ngModel)]="url"
+    autofocus="autofocus" />
+
+<button 
+    [disabled]="isShortening" 
+    class="btn btn-primary mt-3"
+    (click)="shorten()">
+
+    @if(isShortening) {
+        Processing...
+    }
+    @else {
+        Shorten
+    }
+
+</button>
