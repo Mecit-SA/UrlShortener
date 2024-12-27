@@ -306,6 +306,69 @@
         }
       }
     },
+    "/api/Urls/{shortenedUrl}": {
+      "get": {
+        "tags": [
+          "Urls"
+        ],
+        "operationId": "GetOriginalUrl",
+        "parameters": [
+          {
+            "name": "shortenedUrl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Urls": {
+      "post": {
+        "tags": [
+          "Urls"
+        ],
+        "operationId": "ShortenUrl",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortenUrlCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/WeatherForecasts": {
       "get": {
         "tags": [
@@ -555,6 +618,20 @@
             "format": "int32"
           },
           "title": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ShortenUrlCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "host": {
             "type": "string",
             "nullable": true
           }
