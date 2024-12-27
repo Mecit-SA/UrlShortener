@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using UrlShortener.Application.Urls.Queries.GetOriginalUrl;
 using UrlShortener.Application.Urls.Commands.ShortenUrl;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UrlShortener.Web.Endpoints;
 
@@ -13,13 +14,13 @@ public class Urls : EndpointGroupBase
             .MapPost(ShortenUrl);
     }
 
-    public async Task<Ok<string>> GetOriginalUrl(ISender sender, string shortenedUrl)
+    public async Task<IResult> GetOriginalUrl(ISender sender, string shortenedUrl)
     {
         var query = new GetOriginalUrlQuery { ShortenedUrl = shortenedUrl };
 
         var result = await sender.Send(query);
 
-        return TypedResults.Ok(result);
+        return Results.Redirect(result);
     }
 
     public async Task<Ok<string>> ShortenUrl(ISender sender, IHttpContextAccessor httpContextAccessor, ShortenUrlCommand command)

@@ -532,7 +532,7 @@ export class TodoListsClient implements ITodoListsClient {
 }
 
 export interface IUrlsClient {
-    getOriginalUrl(shortenedUrl: string): Observable<string>;
+    getOriginalUrl(shortenedUrl: string): Observable<void>;
     shortenUrl(command: ShortenUrlCommand): Observable<string>;
 }
 
@@ -549,7 +549,7 @@ export class UrlsClient implements IUrlsClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getOriginalUrl(shortenedUrl: string): Observable<string> {
+    getOriginalUrl(shortenedUrl: string): Observable<void> {
         let url_ = this.baseUrl + "/api/Urls/{shortenedUrl}";
         if (shortenedUrl === undefined || shortenedUrl === null)
             throw new Error("The parameter 'shortenedUrl' must be defined.");
@@ -560,7 +560,6 @@ export class UrlsClient implements IUrlsClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Accept": "application/json"
             })
         };
 
@@ -571,14 +570,14 @@ export class UrlsClient implements IUrlsClient {
                 try {
                     return this.processGetOriginalUrl(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<string>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<string>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processGetOriginalUrl(response: HttpResponseBase): Observable<string> {
+    protected processGetOriginalUrl(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -587,11 +586,7 @@ export class UrlsClient implements IUrlsClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return _observableOf(result200);
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
