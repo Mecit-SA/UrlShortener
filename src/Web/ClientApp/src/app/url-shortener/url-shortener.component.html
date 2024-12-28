@@ -1,41 +1,44 @@
-<input type="text"
-       class="form-control item-input-control"
-       [(ngModel)]="url"
-       autofocus="autofocus" />
+<div class="container-fluid bg-gradient p-5 p-sm-3 mt-5 d-flex flex-column h-100 justify-content-center">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9 text-center p-0">
 
-@if (showErrorNotification) {
-<div class="mt-2 mb-2 alert alert-danger alert-dismissible fade show" role="alert">
-  {{ errorMessage }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="onCloseErrorClick()"></button>
-</div>
-}
+      <!-- Input Field -->
+      <div class="input-group mb-3 flex-column flex-sm-row">
+        <input type="text" class="form-control rounded-end-pill p-3 mb-3 w-100" [(ngModel)]="url" placeholder="Enter your long URL here" autofocus="autofocus" />
+        <button [disabled]="isShortening || !url" class="btn btn-primary mt-2 rounded-top-1 ms-md-auto" (click)="shorten()">
+          <ng-container *ngIf="isShortening; else shortenText">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </ng-container>
+          <ng-template #shortenText>Shorten</ng-template>
+        </button>
+      </div>
 
-@if(showResult) {
-  <div class="mt-2 mb-2 alert alert-success alert-dismissible fade show" role="alert">
-    <strong>Here is your short URL:</strong> {{ result }}.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="onCloseResultClick()"></button>
+      <!-- Error Notification -->
+      <div *ngIf="showErrorNotification" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        {{ errorMessage }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="onCloseErrorClick()"></button>
+      </div>
+
+      <!-- Success Notification -->
+      <div *ngIf="showResult" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <strong>
+          Here is your short URL:
+        </strong>
+
+        <a href="{{ result }}" target="_blank" class="text-decoration-none d-block text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+          {{ result }}
+        </a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="onCloseResultClick()"></button>
+
+        <!-- Copy Button -->
+        <button *ngIf="!showCopiedNotification" type="button" class="btn btn-outline-primary rounded-pill m-1" (click)="onCopyClick()">Copy</button>
+
+        <!-- Copy Notification -->
+        <span *ngIf="showCopiedNotification" class="badge bg-primary m-1">Copied to clipboard!</span>
+
+      </div>
+    </div>
   </div>
-
-  @if (showCopiedNotification) {
-  <span class="badge bg-primary">Copied to clipboard!</span>
-  }
-  @else {
-  <button type="button" class="btn btn-outline-primary mt-3" (click)="onCopyClick()">Copy</button>
-  }
-
-}
-
-@else {
-  <button [disabled]="isShortening"
-          class="btn btn-primary mt-3"
-          (click)="shorten()">
-
-    @if(isShortening) {
-    Processing...
-    }
-    @else {
-    Shorten
-    }
-
-  </button>
-}
+</div>

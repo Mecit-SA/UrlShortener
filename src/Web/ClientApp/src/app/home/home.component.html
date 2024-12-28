@@ -1,17 +1,27 @@
-<h1>Welcome to your new URL Shortener app!</h1>
+<div class="p-5 m-3 bg-light border rounded-5 shadow-lg">
 
-With this app, you can:
+  <ul class="list-unstyled">
 
-<ul>
-  <li>Quickly turn <strong>long</strong>, messy links into <strong>short</strong>, clean ones.</li>
-  <li>Enjoy a sleek, <strong>user-friendly</strong> design that works great on any device.</li>
-  <li>
-    We’ve made everything simple and ready to use. Whether you're creating links for personal use or sharing them with others, this app is here to help you stay organized and efficient.
-  </li>
-</ul>
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-fast-forward-circle text-primary me-4 fs-3"></i>
+      <span class="fs-3">Quickly turn <strong>long</strong> links into <strong>short</strong> ones.</span>
+    </li>
 
-Start shortening your links and sharing them in style! 🚀
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-phone text-success me-4 fs-3"></i>
+      <span class="fs-3">Enjoy a <strong>user-friendly</strong> design on any device.</span>
+    </li>
 
-<div class="mt-3">
-  <button class="btn btn-primary" (click)="onStartClick()">Start</button>
+    <li class="d-flex align-items-start">
+      <i class="bi bi-check-circle-fill text-warning me-4 fs-3"></i>
+      <span class="fs-3">Simple and ready to use for personal or shared links.</span>
+    </li>
+  </ul>
+
+  <p class="mt-4 text-secondary fs-4 text-center">Start shortening your links and sharing them! 🚀</p>
+
+  <div class="text-center mt-3">
+    <button class="btn btn-primary btn-lg px-5 py-3 shadow-lg border-0 hover-shadow-lg" (click)="onStartClick()">Get Started</button>
+  </div>
+
 </div>

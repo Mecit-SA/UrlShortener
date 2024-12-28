@@ -1,37 +1,42 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow py-4">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">URL Shortener APP</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
+      <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
+        <i class="bi bi-link-45deg fs-1"></i>
+        <span class="fs-3 fw-bold">URL Shortener</span>
+      </a>
+
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target=".navbar-collapse"
+              aria-label="Toggle navigation"
+              [attr.aria-expanded]="isExpanded"
+              (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
            [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
+          <!--<li class="nav-item"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-          </li>
+            <a class="nav-link text-light fs-5" [routerLink]="['/']">Home</a>
+          </li>-->
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/url-shortener']">URL Shortener</a>
+            <a class="nav-link text-light fs-5" [routerLink]="['/url-shortener']">Try it</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="/api" target="_blank">API</a>
+            <a class="btn btn-outline-light btn-lg ms-2" href="/api" target="_blank">API</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link text-dark" href="/Identity/Account/Manage">Account</a>
-          </li> -->
         </ul>
       </div>
     </div>
   </nav>
+  <div class="bg-dark text-white text-center py-5">
+    <h1 class="display-4">Welcome to the URL Shortener App</h1>
+    <p class="lead">Simplify your links and manage them with ease</p>
+    <!--<a class="btn btn-primary btn-lg mt-3" [routerLink]="['/url-shortener']">Get Started</a>-->
+  </div>
 </header>
