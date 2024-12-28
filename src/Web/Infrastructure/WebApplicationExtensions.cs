@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using UrlShortener.Web.Endpoints;
 
 namespace UrlShortener.Web.Infrastructure;
 
@@ -20,8 +21,15 @@ public static class WebApplicationExtensions
 
         var assembly = Assembly.GetExecutingAssembly();
 
+        var ignoredList = new List<Type>
+        {
+            typeof(WeatherForecasts),
+            typeof(TodoLists),
+            typeof(TodoItems)
+        };
+
         var endpointGroupTypes = assembly.GetExportedTypes()
-            .Where(t => t.IsSubclassOf(endpointGroupType));
+            .Where(t => t.IsSubclassOf(endpointGroupType) && !ignoredList.Contains(t));
 
         foreach (var type in endpointGroupTypes)
         {
