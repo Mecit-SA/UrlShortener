@@ -18,16 +18,12 @@ public class ShortenUrlCommandValidator : AbstractValidator<ShortenUrlCommand>
     public ShortenUrlCommandValidator()
     {
         RuleFor(x => x.Url)
-            .NotEmpty()
-            .WithMessage("The URL cannot be empty")
-            .Matches(@"^\S+$")
-            .WithMessage("The URL cannot contain spaces");
+            .Must(x => Uri.TryCreate(x, UriKind.Absolute, out _))
+            .WithMessage("Invalid URL");
 
         RuleFor(x => x.Host)
-            .NotEmpty()
-            .WithMessage("The Host cannot be empty")
-            .Matches(@"^\S+$")
-            .WithMessage("The Host cannot contain spaces");
+            .Must(x => Uri.TryCreate(x, UriKind.Absolute, out _))
+            .WithMessage("Invalid URL");
     }
 }
 
