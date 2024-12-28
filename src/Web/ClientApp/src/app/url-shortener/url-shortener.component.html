@@ -3,6 +3,13 @@
        [(ngModel)]="url"
        autofocus="autofocus" />
 
+@if (showErrorNotification) {
+<div class="mt-2 mb-2 alert alert-danger alert-dismissible fade show" role="alert">
+  {{ errorMessage }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="onCloseErrorClick()"></button>
+</div>
+}
+
 @if(showResult) {
   <div class="mt-2 mb-2 alert alert-success alert-dismissible fade show" role="alert">
     <strong>Here is your short URL:</strong> {{ result }}.
