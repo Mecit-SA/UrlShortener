@@ -72,10 +72,6 @@
           "url": {
             "type": "string",
             "nullable": true
-          },
-          "host": {
-            "type": "string",
-            "nullable": true
           }
         }
       }

@@ -136,7 +136,6 @@ export class UrlsClient implements IUrlsClient {
 
 export class ShortenUrlCommand implements IShortenUrlCommand {
     url?: string | undefined;
-    host?: string | undefined;
 
     constructor(data?: IShortenUrlCommand) {
         if (data) {
@@ -150,7 +149,6 @@ export class ShortenUrlCommand implements IShortenUrlCommand {
     init(_data?: any) {
         if (_data) {
             this.url = _data["url"];
-            this.host = _data["host"];
         }
     }
 
@@ -164,14 +162,12 @@ export class ShortenUrlCommand implements IShortenUrlCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["url"] = this.url;
-        data["host"] = this.host;
         return data;
     }
 }
 
 export interface IShortenUrlCommand {
     url?: string | undefined;
-    host?: string | undefined;
 }
 
 export class SwaggerException extends Error {

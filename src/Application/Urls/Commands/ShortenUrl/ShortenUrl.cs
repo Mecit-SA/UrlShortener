@@ -1,4 +1,5 @@
-﻿using UrlShortener.Application.Common.Interfaces;
+﻿using System.Text.Json.Serialization;
+using UrlShortener.Application.Common.Interfaces;
 using UrlShortener.Domain.Entities;
 using UrlShortener.Domain.Events;
 
@@ -7,6 +8,8 @@ namespace UrlShortener.Application.Urls.Commands.ShortenUrl;
 public record ShortenUrlCommand : IRequest<string>
 {
     public string? Url { get; set; }
+
+    [JsonIgnore]
     public string? Host { get; set; }
 }
 
