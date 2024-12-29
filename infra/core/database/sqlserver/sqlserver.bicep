@@ -59,7 +59,6 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     tier: 'Basic'
     capacity: 5 // Minimum DTUs for Basic tier
   }
-  maxSizeBytes: 2147483648 // 2 GB, maximum size for Basic tier
 }
 
 resource sqlDatabaseDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!(empty(logAnalyticsWorkspaceId))) {
