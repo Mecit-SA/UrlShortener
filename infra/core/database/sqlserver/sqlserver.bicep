@@ -55,9 +55,10 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
   name: databaseName
   location: location
   sku: {
-    name: 'Basic'
-    tier: 'Basic'
-    capacity: 5 // Minimum DTUs for Basic tier
+    name: 'GP_S_Gen5'  // General Purpose, Serverless SKU
+    tier: 'GeneralPurpose'
+    family: 'Gen5'
+    capacity: 1  // Minimum vCores (adjust as needed)
   }
 }
 
