@@ -15,10 +15,8 @@ module appServicePlan '../core/host/appserviceplan.bicep' = {
     sku: {
       name: 'F1'
     }
-    properties: {
-      platform: {
-        architecture: 'x86'  // Explicitly set x86 architecture to allow F1 tier
-      }
+    platform: {
+      architecture: 'x86'  // Explicitly set x86 architecture to allow F1 tier
     }
   }
 }
