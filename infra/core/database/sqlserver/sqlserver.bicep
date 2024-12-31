@@ -60,7 +60,9 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     family: 'Gen5'
     capacity: 1  // Minimum vCores (adjust as needed)
   }
-  autoPauseDelay: 5 // 5 minutes
+  properties: {
+    autoPauseDelay: 5 // Auto-pause after 5 minutes of inactivity
+  }
 }
 
 resource sqlDatabaseDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!(empty(logAnalyticsWorkspaceId))) {
