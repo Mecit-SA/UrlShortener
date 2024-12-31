@@ -30,11 +30,15 @@ public class RedirectToUrlQueryHandler : IRequestHandler<GetOriginalUrlQuery, st
 
     public async Task<string> Handle(GetOriginalUrlQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Urls
-            .Where(l => l.ShortenedUrl == request.ShortenedUrl)
-            .SingleOrDefaultAsync(cancellationToken);
+        var query = _context.Urls.Where(l => l.ShortenedUrl == request.ShortenedUrl);
+
+        var entity = await query.SingleOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(request.ShortenedUrl!, entity);
+
+        await query.ExecuteUpdateAsync(update => 
+            update.SetProperty(u => u.VisitCount, u => u.VisitCount + 1), 
+            cancellationToken);
 
         return entity.OriginalUrl!;
     }

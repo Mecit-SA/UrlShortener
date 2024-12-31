@@ -5,4 +5,6 @@ public class Url : BaseAuditableEntity
     public string? OriginalUrl { get; set; }
 
     public string? ShortenedUrl { get; set; }
+
+    public int VisitCount { get; set; }
 }
