@@ -61,7 +61,7 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     capacity: 1  // Minimum vCores (adjust as needed)
   }
   properties: {
-    autoPauseDelay: 5 // Auto-pause after 5 minutes of inactivity
+    autoPauseDelay: 15 // Auto-pause after 15 minutes of inactivity (this is the minimum)
   }
 }
 
