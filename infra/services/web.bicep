@@ -16,7 +16,6 @@ module appServicePlan '../core/host/appserviceplan.bicep' = {
       name: 'F1'
     }
     reserved: true // supports both x86 and x64.
-    
   }
 }
 
