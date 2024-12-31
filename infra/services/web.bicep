@@ -15,9 +15,8 @@ module appServicePlan '../core/host/appserviceplan.bicep' = {
     sku: {
       name: 'F1'
     }
-    properties: {
-        reserved: true // supports both x86 and x64.
-    }
+    reserved: true // supports both x86 and x64.
+    
   }
 }
 
