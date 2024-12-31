@@ -12,13 +12,16 @@ import { HomeComponent } from './home/home.component';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UrlShortenerComponent } from './url-shortener/url-shortener.component';
+import { HttpErrorInterceptor } from '../http-interceptors/error-interceptor/http-error.interceptor';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
         HomeComponent,
-        UrlShortenerComponent
+        UrlShortenerComponent,
+        NotificationComponent
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -33,6 +36,7 @@ import { UrlShortenerComponent } from './url-shortener/url-shortener.component';
     providers: [
         { provide: APP_ID, useValue: 'ng-cli-universal' },
         { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
