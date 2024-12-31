@@ -7,7 +7,6 @@
     <RootNamespace>UrlShortener.Web</RootNamespace>
     <AssemblyName>UrlShortener.Web</AssemblyName>
     <UserSecretsId>d1aeedea-59b4-43fb-a5cb-79f89b830947</UserSecretsId>
-    <RuntimeIdentifier>linux-x86</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
