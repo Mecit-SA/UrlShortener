@@ -15,9 +15,6 @@ module appServicePlan '../core/host/appserviceplan.bicep' = {
     sku: {
       name: 'F1'
     }
-    platform: {
-      architecture: 'x86'  // Explicitly set x86 architecture to allow F1 tier
-    }
   }
 }
 
@@ -35,6 +32,9 @@ module appService '../core/host/appservice.bicep' = {
     healthCheckPath: '/health'
     appSettings: {
       ASPNETCORE_ENVIRONMENT: 'Development'
+    }
+    platform: {
+      architecture: 'x86'  // Explicitly set x86 architecture to allow F1 tier
     }
   }
 }
