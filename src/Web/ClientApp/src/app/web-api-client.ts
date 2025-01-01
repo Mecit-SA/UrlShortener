@@ -134,6 +134,72 @@ export class UrlsClient implements IUrlsClient {
     }
 }
 
+export interface IUsersClient {
+    getCurrentUser(): Observable<GetCurrentUserResponse>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class UsersClient implements IUsersClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getCurrentUser(): Observable<GetCurrentUserResponse> {
+        let url_ = this.baseUrl + "/api/Users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCurrentUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCurrentUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetCurrentUserResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetCurrentUserResponse>;
+        }));
+    }
+
+    protected processGetCurrentUser(response: HttpResponseBase): Observable<GetCurrentUserResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetCurrentUserResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class ShortenUrlCommand implements IShortenUrlCommand {
     url?: string | undefined;
 
@@ -168,6 +234,82 @@ export class ShortenUrlCommand implements IShortenUrlCommand {
 
 export interface IShortenUrlCommand {
     url?: string | undefined;
+}
+
+export class GetCurrentUserResponse implements IGetCurrentUserResponse {
+    isLoggedIn?: boolean;
+    user?: GetCurrentUserDTO | undefined;
+
+    constructor(data?: IGetCurrentUserResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isLoggedIn = _data["isLoggedIn"];
+            this.user = _data["user"] ? GetCurrentUserDTO.fromJS(_data["user"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetCurrentUserResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCurrentUserResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isLoggedIn"] = this.isLoggedIn;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IGetCurrentUserResponse {
+    isLoggedIn?: boolean;
+    user?: GetCurrentUserDTO | undefined;
+}
+
+export class GetCurrentUserDTO implements IGetCurrentUserDTO {
+    username?: string | undefined;
+
+    constructor(data?: IGetCurrentUserDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"];
+        }
+    }
+
+    static fromJS(data: any): GetCurrentUserDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCurrentUserDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
+        return data;
+    }
+}
+
+export interface IGetCurrentUserDTO {
+    username?: string | undefined;
 }
 
 export class SwaggerException extends Error {

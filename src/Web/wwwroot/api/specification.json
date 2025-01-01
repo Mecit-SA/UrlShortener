@@ -61,6 +61,26 @@
           }
         }
       }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetCurrentUser",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCurrentUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -70,6 +90,33 @@
         "additionalProperties": false,
         "properties": {
           "url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetCurrentUserResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isLoggedIn": {
+            "type": "boolean"
+          },
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GetCurrentUserDTO"
+              }
+            ]
+          }
+        }
+      },
+      "GetCurrentUserDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
             "type": "string",
             "nullable": true
           }

@@ -13,5 +13,9 @@ public class CurrentUser : IUser
         _httpContextAccessor = httpContextAccessor;
     }
 
+    public bool IsLoggedIn => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+
     public string? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    public string? Username => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 }

@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UrlShortenerComponent } from './url-shortener/url-shortener.component';
 import { HttpErrorInterceptor } from '../http-interceptors/error-interceptor/http-error.interceptor';
 import { NotificationComponent } from './notification/notification.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { NotificationComponent } from './notification/notification.component';
     imports: [
         BrowserModule,
         FormsModule,
+        BsDropdownModule.forRoot(),
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
             { path: 'url-shortener', component: UrlShortenerComponent }
