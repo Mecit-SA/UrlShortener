@@ -1,0 +1,13 @@
+/* Import Bootstrap SCSS first */
+@import "node_modules/bootstrap/scss/bootstrap";
+
+/* Adjust Bootstrap colors to be darker */
+
+$primary-color: darken(#0d6efd, 5%); /* Darker version of Bootstrap primary blue */
+$secondary-color: darken(#6c757d, 5%); /* Darker version of Bootstrap secondary gray */
+$success-color: darken(#198754, 5%); /* Darker version of Bootstrap success green */
+$danger-color: darken(#dc3545, 5%); /* Darker version of Bootstrap danger red */
+$warning-color: darken(#ffc107, 5%); /* Darker version of Bootstrap warning yellow */
+$info-color: darken(#0dcaf0, 5%); /* Darker version of Bootstrap info cyan */
+$light-color: darken(#f8f9fa, 5%); /* Darker version of Bootstrap light */
+$dark-color: darken(#212529, 5%); /* Darker version of Bootstrap dark */
