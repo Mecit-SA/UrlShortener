@@ -11,6 +11,8 @@ services:
       - "1433:1433"
     networks:
       - app-network
+    volumes:
+      - urlshortener_data:/var/opt/mssql
 
   app:
     build:
@@ -31,3 +33,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  urlshortener_data:
