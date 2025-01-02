@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
-import { ShortenUrlCommand, UrlsClient } from '../web-api-client';
+import { Component, OnInit } from '@angular/core';
+import { GetCurrentUserResponse, ShortenUrlCommand, UrlsClient } from '../web-api-client';
+import { UserService } from '../../services/user.service';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-url-shortener',
   templateUrl: './url-shortener.component.html',
   styleUrl: './url-shortener.component.css'
 })
-export class UrlShortenerComponent {
+export class UrlShortenerComponent implements OnInit {
 
   url: string;
   isShortening = false;
@@ -16,7 +19,38 @@ export class UrlShortenerComponent {
   showErrorNotification = false;
   errorMessage: string;
 
-  constructor(private urlsClient: UrlsClient) { }
+  generatedUrlCount = 0;
+
+  currentUserResponse: GetCurrentUserResponse;
+
+  showLoginSuggestionModal: boolean;
+  shouldIgnoreLoginSuggestion: boolean;
+
+  get shouldSuggestLogin() {
+    const isLoggedIn = this.currentUserResponse?.isLoggedIn;
+
+    return !isLoggedIn && !this.shouldIgnoreLoginSuggestion && this.generatedUrlCount == 3;
+  }
+
+  get redirectUrlAfterLogin() {
+    return encodeURIComponent(`/url-shortener?url=${this.url}`); 
+  }
+
+  constructor(
+    private urlsClient: UrlsClient,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.url = params['url'];
+    });
+  }
+
+  ngOnInit(): void {
+    this.userService.getCurrentUser()
+      .subscribe(response => this.currentUserResponse = response);
+  }
 
   resetAllProps(): void {
     this.showResult = false;
@@ -24,9 +58,16 @@ export class UrlShortenerComponent {
     this.showCopiedNotification = false;
     this.showErrorNotification = false;
     this.errorMessage = '';
+    this.notificationService.clearError();
   }
 
   shorten(): void {
+
+    if (this.shouldSuggestLogin) {
+      this.showLoginSuggestionModal = true;
+      return;
+    }
+
     this.resetAllProps();
     this.isShortening = true;
 
@@ -37,6 +78,7 @@ export class UrlShortenerComponent {
         this.result = res;
         this.isShortening = false;
         this.showResult = true;
+        this.generatedUrlCount++;
       },
       error: () => {
         this.isShortening = false;
@@ -71,4 +113,8 @@ export class UrlShortenerComponent {
     this.errorMessage = '';
   }
 
+  onCloseLoginSuggestionModalClick(): void {
+    this.showLoginSuggestionModal = false;
+    this.shouldIgnoreLoginSuggestion = true;
+  }
 }

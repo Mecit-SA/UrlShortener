@@ -15,6 +15,7 @@ import { UrlShortenerComponent } from './url-shortener/url-shortener.component';
 import { HttpErrorInterceptor } from '../http-interceptors/error-interceptor/http-error.interceptor';
 import { NotificationComponent } from './notification/notification.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalComponent } from './shared-components/modal/modal.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         NavMenuComponent,
         HomeComponent,
         UrlShortenerComponent,
-        NotificationComponent
+        NotificationComponent,
+        ModalComponent
     ],
     bootstrap: [AppComponent],
     imports: [

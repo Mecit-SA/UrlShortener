@@ -28,7 +28,7 @@
             <a class="nav-link text-light fs-5" [routerLink]="['/url-shortener']">Try it</a>
           </li>
 
-          @if (!currentUserResponse.isLoggedIn) {
+          @if (!currentUserResponse?.isLoggedIn) {
           <li class="nav-item">
             <a class="btn btn-primary btn-lg ms-2" href="/Identity/Account/Login">Login</a>
           </li>
@@ -37,7 +37,7 @@
           <li>
             <div class="btn-group" dropdown>
               <button id="button-user" dropdownToggle type="button" class="btn btn-primary btn-lg dropdown-toggle">
-                {{ currentUserResponse.user.username }} <span class="caret"></span>
+                {{ currentUserResponse?.user?.username }} <span class="caret"></span>
               </button>
               <ul *dropdownMenu class="dropdown-menu" aria-labelledby="button-user">
                 <li><a class="dropdown-item" href="/Identity/Account/Manage">Manage</a></li>
