@@ -10,6 +10,11 @@ public static class DependencyInjection
     {
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        builder.Services.AddStackExchangeRedisCache(action => {
+            var connection = builder.Configuration["CacheSettings:RedisConnectionString"];
+            action.Configuration = connection;
+        });
+
         builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.Services.AddMediatR(cfg => {

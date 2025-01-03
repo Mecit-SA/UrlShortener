@@ -1,4 +1,6 @@
-﻿using UrlShortener.Application.Common.Interfaces;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using UrlShortener.Application.Common.Interfaces;
+using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.Urls.Queries.GetOriginalUrl;
 
@@ -22,24 +24,40 @@ public class GetOriginalUrlQueryValidator : AbstractValidator<GetOriginalUrlQuer
 public class RedirectToUrlQueryHandler : IRequestHandler<GetOriginalUrlQuery, string>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IDistributedCache _distributedCache;
 
-    public RedirectToUrlQueryHandler(IApplicationDbContext context)
+    public RedirectToUrlQueryHandler(IApplicationDbContext context, IDistributedCache distributedCache)
     {
         _context = context;
+        _distributedCache = distributedCache;
     }
 
     public async Task<string> Handle(GetOriginalUrlQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Urls.Where(l => l.ShortenedUrl == request.ShortenedUrl);
 
+        var cachedUrl = await _distributedCache.GetStringAsync(request.ShortenedUrl!, cancellationToken);
+        if(cachedUrl != null)
+        {
+            await IncreaseVisitCountAsync(query, cancellationToken);
+            return cachedUrl;
+        }
+
         var entity = await query.SingleOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(request.ShortenedUrl!, entity);
 
-        await query.ExecuteUpdateAsync(update => 
-            update.SetProperty(u => u.VisitCount, u => u.VisitCount + 1), 
-            cancellationToken);
+        await IncreaseVisitCountAsync(query, cancellationToken);
+        
+        await _distributedCache.SetStringAsync(entity.ShortenedUrl!, entity.OriginalUrl!, cancellationToken);
 
         return entity.OriginalUrl!;
+    }
+
+    private static async Task IncreaseVisitCountAsync(IQueryable<Url> query, CancellationToken cancellationToken)
+    {
+        await query.ExecuteUpdateAsync(update =>
+            update.SetProperty(u => u.VisitCount, u => u.VisitCount + 1),
+            cancellationToken);
     }
 }

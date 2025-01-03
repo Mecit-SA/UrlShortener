@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Microsoft.Extensions.Caching.Distributed;
 using UrlShortener.Application.Common.Interfaces;
 using UrlShortener.Domain.Entities;
 using UrlShortener.Domain.Events;
@@ -30,10 +31,12 @@ public class ShortenUrlCommandValidator : AbstractValidator<ShortenUrlCommand>
 public class ShortenUrlCommandHandler : IRequestHandler<ShortenUrlCommand, string>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IDistributedCache _distributedCache;
 
-    public ShortenUrlCommandHandler(IApplicationDbContext context)
+    public ShortenUrlCommandHandler(IApplicationDbContext context, IDistributedCache distributedCache)
     {
         _context = context;
+        _distributedCache = distributedCache;
     }
 
     public async Task<string> Handle(ShortenUrlCommand request, CancellationToken cancellationToken)
@@ -49,6 +52,8 @@ public class ShortenUrlCommandHandler : IRequestHandler<ShortenUrlCommand, strin
         _context.Urls.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        await _distributedCache.SetStringAsync(entity.ShortenedUrl!, entity.OriginalUrl!, cancellationToken);
 
         return request.Host + "/api/urls/" + entity.ShortenedUrl;
     }
